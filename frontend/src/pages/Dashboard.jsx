@@ -57,23 +57,25 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-stone-900 transition-colors duration-300">
             
-            {/* NAVBAR */}
-            <nav className="navbar-glass">
-                <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-                    Panel de {user.role === 'admin' ? 'Administrador 🛠️' : 'Usuario 👤'}
-                </h1>
-                <div className="flex gap-4 items-center">
-                    <span className="text-gray-600 dark:text-gray-300 hidden sm:block">
-                        Hola, <b className="text-rose-600">{user.username}</b>
-                    </span>
+            <div className="container mx-auto p-6 md:p-10"></div>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+                            Panel de {user.role === 'admin' ? 'Administrador 🛠️' : 'Usuario 👤'}
+                        </h1>
+                        <p className="text-gray-500 dark:text-gray-400 mt-1">
+                            Bienvenidx <b className="text-rose-600">{user.username}</b>
+                        </p>
+                    </div>
+                    
+                    {/* Botón Cerrar Sesión movido aquí */}
                     <button 
                         onClick={logout} 
-                        className="btn btn-red"
+                        className="btn btn-red shadow-lg shadow-red-500/20"
                     >
                         Cerrar Sesión
                     </button>
                 </div>
-            </nav>
 
             {/* CONTENEDOR PRINCIPAL */}
             <div className="container mx-auto p-6 md:p-10">
