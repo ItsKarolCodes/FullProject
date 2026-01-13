@@ -8,10 +8,11 @@ export const useReviews = () => {
     const addReview = async (reviewData) => {
         setLoading(true);
         setError(null);
-        // IMPORTANTE: Leemos el token justo en el momento de enviar
+        // Leemos el token justo en el momento de enviar
         const token = localStorage.getItem('token');
 
         try {
+
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/reviews`, {
                 method: 'POST',
                 headers: {
@@ -39,10 +40,15 @@ export const useReviews = () => {
     // 2. OBTENER REVIEWS (Esta no necesita token normalmente, es pública)
     const getReviews = useCallback(async (movieId) => {
         try {
+            // Petición GET pública, no ponemos headers con token
+            // Cualquiera puede leer las opiniones, aunque no esté registrado.
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/reviews/${movieId}`);
+            // Si falla, devolvemos array vacío (seguridad)
             if (!response.ok) return [];
             
             const data = await response.json();
+            // Nos aseguramos de devolver siempre un Array. 
+            // Si devolviéramos 'null', el .map() del componente explotaría.
             return Array.isArray(data) ? data : [];
         } catch (error) {
             console.error(error);

@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
+
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+    --font-poppins: "Poppins", sans-serif;
     --color-rose-600: oklch(58.6% 0.253 17.585);
 
 
@@ -16,24 +19,47 @@
     background: oklch(92.3% 0.003 48.717);
 }
 
-@layer components {
+@layer base {
+    /* APLICARLA GLOBALMENTE */
+    html {
+        font-family: var(--font-poppins);
+    }
+}
 
+@layer components {
+    .links {
+        @apply text-rose-500 hover:text-gray-300 text-sm font-bold uppercase tracking-wider transition duration-300;
+    }
     .btn {
         @apply font-bold py-2 px-4 rounded-lg transition-colors text-sm uppercase tracking-wide shadow-sm inline-flex items-center justify-center cursor-pointer;
     }
 
     /* Variante de color principal (Rosa) */
     .btn-primary {
-        @apply bg-rose-600 hover:bg-rose-700 text-white;
+        @apply bg-rose-600 hover:bg-rose-700 text-white ;
     }
 
     /* Variante de color peligro (Rojo) */
-    .btn-danger {
-        @apply bg-red-500 hover:bg-red-600 text-white;
+    .btn-red {
+        @apply bg-red-500 hover:bg-red-600 text-white ;
     }
 
     /* Cards */
     .card-rose {
         @apply relative p-8 bg-gradient-to-br from-rose-600 to-rose-700 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-600 hover:scale-105 overflow-hidden border border-rose-500/30;
     }
+
+    .card-stone {
+        @apply bg-white dark:bg-stone-800 p-8 rounded-3xl shadow-lg border border-stone-100 dark:border-stone-700;
+    }
+
+    .card-stone-600 {
+        @apply mb-10 bg-stone-50 dark:bg-stone-700/30 p-6 rounded-xl border border-stone-200 dark:border-stone-600;
+    }
+
+    .text-area {     
+        @apply  p-3 rounded-xl border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-700 text-stone-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all shadow-sm;
+    }
+
+
 }

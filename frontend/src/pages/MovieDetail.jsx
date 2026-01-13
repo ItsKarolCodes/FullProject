@@ -53,17 +53,12 @@ const MovieDetail = () => {
 
                 {isAdmin && (
                     <div className="flex gap-3">
-                        <Link
-                            to={`/edit/${id}`}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-bold shadow-md transition"
-                        >
-                            ✏️ Editar
-                        </Link>
+                        
 
                         {/* Botón Borrar */}
                         <button
                             onClick={handleDeleteClick}
-                            className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-md transition"
+                            className="btn-red"
                         >
                             <span>🗑️</span> Borrar
                         </button>
@@ -72,7 +67,7 @@ const MovieDetail = () => {
             </div>
 
             {/* Tarjeta Principal */}
-            <div className="bg-white dark:bg-stone-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-stone-200 dark:border-stone-700">
+            <div className=" card-stone overflow-hidden  flex flex-col md:flex-row">
                 
 
                 {/* Ejemplo rápido de la imagen: */}

@@ -58,20 +58,26 @@ export const useFavorites = () => {
         const token = localStorage.getItem('token');
         
         try {
+            // Peticion al backend
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/favorites`, {
                 method: 'GET',
                 headers: {
+                    // 3. AUTENTICACIÓN. Usando el estándar correcto 'Bearer'.
+                    // Esto abre la puerta protegida en el servidor.
                     'Authorization': `Bearer ${token}`
                 }
             });
             
+            // Verificamos la respuesta
             if (response.ok) {
                 const data = await response.json();
                 // Devolvemos el array de películas (o array vacío si no hay)
                 return Array.isArray(data) ? data : [];
             }
+            // Si la respuesta no fue OK (ej: 401, 500), devolvemos lista vacía para no romper la UI.
             return [];
         } catch (error) {
+            // Si el servidor está caido o no hay internet
             console.error("Error al cargar favoritos:", error);
             return [];
         }

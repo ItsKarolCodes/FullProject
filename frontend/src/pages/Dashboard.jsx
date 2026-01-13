@@ -58,7 +58,7 @@ const Dashboard = () => {
         <div className="min-h-screen bg-gray-50 dark:bg-stone-900 transition-colors duration-300">
             
             {/* NAVBAR */}
-            <nav className="bg-white dark:bg-stone-800 shadow px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+            <nav className="navbar-glass">
                 <h1 className="text-xl font-bold text-gray-800 dark:text-white">
                     Panel de {user.role === 'admin' ? 'Administrador 🛠️' : 'Usuario 👤'}
                 </h1>
@@ -68,7 +68,7 @@ const Dashboard = () => {
                     </span>
                     <button 
                         onClick={logout} 
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm"
+                        className="btn btn-red"
                     >
                         Cerrar Sesión
                     </button>
@@ -93,13 +93,13 @@ const Dashboard = () => {
                                         Gestiona el catálogo completo.
                                     </p>
                                 </div>
-                                <Link to="/create" className="bg-rose-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-rose-700 transition shadow-md">
+                                <Link to="/create" className="btn btn-primary">
                                     + Añadir Película
                                 </Link>
                             </div>
 
                             {/* TABLA CON BUSCADOR */}
-                            <div className="bg-white dark:bg-stone-800 rounded-xl border border-gray-200 dark:border-stone-700 overflow-hidden">
+                            <div className="card-stone !p-0 overflow-hidden">
                                 
                                 <div className="p-4 bg-gray-50 dark:bg-stone-700 border-b border-gray-200 dark:border-stone-600 flex flex-col sm:flex-row justify-between items-center gap-4">
                                     <h3 className="font-bold text-gray-700 dark:text-gray-200">
@@ -130,7 +130,7 @@ const Dashboard = () => {
                                                         <td className="p-4 text-right">
                                                             <button 
                                                                 onClick={() => deleteMovie(movie._id)}
-                                                                className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30 px-3 py-1 rounded-lg transition font-bold text-xs border border-red-200 dark:border-red-900/30"
+                                                                className="btn btn-red"
                                                             >
                                                                 Eliminar 🗑️
                                                             </button>
@@ -180,7 +180,7 @@ const Dashboard = () => {
                                         <p className="text-gray-500 dark:text-gray-400 text-lg mb-6">
                                             Aún no has guardado ninguna película.
                                         </p>
-                                        <Link to="/list" className="bg-rose-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-rose-700 transition inline-block">
+                                        <Link to="/list" className="btn btn-primary">
                                             Ir al Catálogo 🍿
                                         </Link>
                                     </div>

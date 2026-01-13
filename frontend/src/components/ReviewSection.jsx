@@ -2,29 +2,40 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';       
 import { useReviews } from '@/hooks/useReviews'; 
 
+// Este componente recibe 'movieId' como prop.
 const ReviewSection = ({ movieId }) => {
+    // 'reviews': Array donde guardaremos la lista de comentarios
     const [reviews, setReviews] = useState([]);
+    // 'newComment': El texto que el usuario está escribiendo en el input ahora mismo
     const [newComment, setNewComment] = useState('');
+    // 'rating': La puntuación (estrellas) seleccionada, por defecto 5.
     const [rating, setRating] = useState(5);
     
     // Hooks personalizados
+    // useAuth: Nos da el usuario actual
     const { user } = useAuth(); 
+
     const { addReview, getReviews, loading, error } = useReviews();
 
     // 1. Cargar reseñas al entrar o cambiar de peli
     useEffect(() => {
+        // Solo intentamos cargar si hay un ID de película válido
         const loadData = async () => {
+            // Llamamos a la función del hook (que hace el fetch al backend)
             if (movieId) {
+                // Guardamos los datos recibidos en el estado
                 const data = await getReviews(movieId);
                 setReviews(data);
             }
         };
         loadData();
+        // "Si cambia el ID de la peli, vuelve a ejecutar esto para cargar las nuevas opiniones".
     }, [movieId, getReviews]);
 
     // 2. Enviar nueva reseña
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         
         const savedReview = await addReview({
             movieId, 
@@ -40,6 +51,8 @@ const ReviewSection = ({ movieId }) => {
                 username: user.username 
             };
             
+            // Actualizamos la lista visualmente:
+            // Ponemos el nuevo comentario EL PRIMERO [...nuevos, ...viejos]
             setReviews([reviewWithUser, ...reviews]); 
             setNewComment(''); // Limpiar campo
             alert("¡Gracias por tu opinión!");
@@ -47,20 +60,20 @@ const ReviewSection = ({ movieId }) => {
     };
 
     return (
-        <div className="mt-12 bg-white dark:bg-stone-800 p-8 rounded-3xl shadow-lg border border-stone-100 dark:border-stone-700">
+        <div className="card-stone">
             <h3 className="text-2xl font-bold mb-6 text-stone-700 dark:text-white flex items-center gap-2">
                 💬 Opiniones de la Comunidad
             </h3>
 
             {/* FORMULARIO (Solo si hay usuario logueado) */}
             {user ? (
-                <form onSubmit={handleSubmit} className="mb-10 bg-stone-50 dark:bg-stone-700/30 p-6 rounded-xl border border-stone-200 dark:border-stone-600">
+                <form onSubmit={handleSubmit} className="card-stone-600">
                     <div className="mb-4">
                         <label className="block text-sm font-bold mb-2 text-stone-700 dark:text-stone-300">Tu Puntuación</label>
                         <select 
                             value={rating} 
                             onChange={(e) => setRating(e.target.value)}
-                            className="w-full md:w-32 p-2 rounded-lg border border-stone-300 dark:border-stone-600 dark:bg-stone-700 dark:text-white focus:ring-2 focus:ring-rose-500 outline-none transition"
+                            className="text-area"
                         >
                             {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(num => (
                                 <option key={num} value={num}>⭐ {num}</option>
@@ -74,7 +87,7 @@ const ReviewSection = ({ movieId }) => {
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                             placeholder="¿Qué te ha parecido la película?"
-                            className="w-full p-3 rounded-lg border border-stone-300 dark:border-stone-600 dark:bg-stone-700 dark:text-white h-24 focus:ring-2 focus:ring-rose-500 outline-none resize-none transition"
+                            className="text-area w-full"
                             required
                         />
                     </div>
@@ -82,7 +95,7 @@ const ReviewSection = ({ movieId }) => {
                     <button 
                         type="submit" 
                         disabled={loading}
-                        className={`px-6 py-2 rounded-lg font-bold text-white shadow-md transition ${loading ? 'bg-rose-400 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700 transform hover:-translate-y-0.5'}`}
+                        className={`btn btn-primary ${loading ? 'bg-rose-400 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700 transform hover:-translate-y-0.5'}`}
                     >
                         {loading ? 'Publicando...' : 'Publicar Opinión'}
                     </button>
