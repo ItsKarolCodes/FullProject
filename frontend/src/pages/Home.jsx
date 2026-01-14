@@ -12,7 +12,7 @@ const Home = () => {
                 <img
                     src="/images/cineGemini.png"
                     alt="Hero VideoClub"
-                    className="absolute top-0 left-0 w-full h-full object-cover"
+                    className="absolute top-0 left-0 w-full h-full object-cover object-center"
                 // 'absolute' para que se salga del flujo y se ponga detrás
                 // 'object-cover' para que no se deforme
                 />
