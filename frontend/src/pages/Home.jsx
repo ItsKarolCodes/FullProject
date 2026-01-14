@@ -5,9 +5,7 @@ const Home = () => {
     return (
         <div className="min-h-screen  text-white font-sans">
 
-            {/* 1. HERO SECTION (La parte gigante con foto) */}
-            <div
-                className="relative h-[600px] flex flex-col justify-center items-center text-center px-4"
+            <div className="relative h-[400px] md:h-[600px] flex flex-col justify-center items-center text-center px-4"
             >
                 <img
                     src="/images/cineGemini.png"
