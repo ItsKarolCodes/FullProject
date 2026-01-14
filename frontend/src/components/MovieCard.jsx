@@ -85,12 +85,12 @@ const MovieCard = ({ movie }) => {
                 <p className="text-gray-500 text-sm mb-4 italic truncate">"{movie.director}"</p>
                 
                 {/* Footer Tarjeta */}
-                <div className="flex justify-between items-center text-sm text-gray-400 border-t pt-3 mt-auto">
+                <div className="flex justify-between items-center flex-col text-sm text-gray-400 border-t pt-3 mt-auto">
                     <span>{movie.year}</span>
                     
                     <Link 
                         to={`/movie/${movie._id}`} 
-                        className="btn btn-primary"
+                        className="btn btn-primary mt-auto w-full"
                     >
                         Ver detalles
                     </Link>

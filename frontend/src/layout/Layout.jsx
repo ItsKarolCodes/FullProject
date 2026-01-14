@@ -19,18 +19,24 @@ const Layout = () => {
                     <Link to="/" className="flex items-center gap-2 md:gap-3 group shrink-0">
                         <div className="bg-gradient-to-tr from-rose-600 to-pink-500 p-2 rounded-lg group-hover:scale-110 transition duration-300 shadow-lg shadow-rose-500/20">          
                         </div>
-                        <span className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                        <span 
+                        className="text-2xl md:text-4xl text-gray-200 relative leading-none mt-1"
+                        style={{ 
+                            fontFamily: "'Modak', cursive",
+                            letterSpacing: "1px"
+                        }}
+                        >
                             Video<span className="text-rose-500">Club</span>
                         </span>
                     </Link>
 
                     {/* CENTRO: Escritorio */}
                     <div className="hidden md:flex items-center gap-8">
-                        <Link to="/list" className= "text-gray-300 hover:text-white transition font-medium">
+                        <Link to="/list" className= "text-gray-300 hover:text-rose-500 transition font-medium">
                             Catálogo
                         </Link>
                         {user && (
-                            <Link to="/dashboard" className="text-gray-300 hover:text-white transition font-medium">
+                            <Link to="/dashboard" className="text-gray-300 hover:text-rose-500  transition font-medium">
                                 Mi Panel
                             </Link>
                         )}

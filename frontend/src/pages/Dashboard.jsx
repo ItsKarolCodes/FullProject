@@ -5,21 +5,42 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { useMovies } from '@/hooks/useMovies'; 
 import MovieCard from '@/components/MovieCard';
 import MovieSearch from '@/components/MovieSearch';
+import { useConfirmDelete } from '@/hooks/useConfirmDelete';
+// 👇 1. IMPORTANTE: Importamos el Modal de Edición
+import EditMovieModal from '@/components/EditMovieModal';
 
 const Dashboard = () => {
     // === 1. HOOKS Y HERRAMIENTAS ===
-    const navigate = useNavigate();// Para redirigir al usuario
-    const { user, loading: authLoading, logout } = useAuth();// Extraemos info del usuario logueado
+    const navigate = useNavigate();
+    const { user, loading: authLoading, logout } = useAuth();
     
     // Hooks de datos
     const { getMyFavorites } = useFavorites(); 
-    const { movies, getMovies, deleteMovie } = useMovies(); 
+    // 👇 2. Asegúrate de sacar 'updateMovie' de aquí
+    const { movies, getMovies, deleteMovie, updateMovie } = useMovies(); 
 
     // Estados locales
-    const [favorites, setFavorites] = useState([]); // Lista de pelis favoritas
-    const [loadingFavs, setLoadingFavs] = useState(true); // Para mostrar "Cargando..." mientras buscamos favoritos
-    const [searchTerm, setSearchTerm] = useState(''); // Lo que el admin escribe en el buscador
+    const [favorites, setFavorites] = useState([]); 
+    const [loadingFavs, setLoadingFavs] = useState(true); 
+    const [searchTerm, setSearchTerm] = useState(''); 
     
+    // Hook personalizado para borrar
+    const { isOpen, askToDelete, confirm, close } = useConfirmDelete(deleteMovie);
+
+    // 👇 3. NUEVOS ESTADOS PARA EDITAR
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [movieToEdit, setMovieToEdit] = useState(null);
+
+    // Funciones para abrir/cerrar el modal de edición
+    const handleEditClick = (movie) => {
+        setMovieToEdit(movie);
+        setIsEditOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditOpen(false);
+        setMovieToEdit(null);
+    };
 
     // Protección de ruta
     useEffect(() => {
@@ -29,22 +50,19 @@ const Dashboard = () => {
     }, [user, authLoading, navigate]);
 
     // 3. CARGA DE DATOS
-    // Dependiendo de si eres Admin o User, cargamos cosas distintas. 
     useEffect(() => {
         const loadData = async () => {
             if (user?.role === 'user') {
-                // Si es usuario, cargamos favoritos
                 const data = await getMyFavorites();
                 setFavorites(data);
                 setLoadingFavs(false);
             } else if (user?.role === 'admin') {
-                // Si es admin, cargamos TODAS las películas para gestionar
                 await getMovies();
             }
         };
         
         if (user) loadData();
-    }, [user]); // Se ejecuta al cargar el usuario
+    }, [user]); 
 
     // Lógica de filtrado
     const filteredMovies = movies.filter(movie => 
@@ -55,9 +73,12 @@ const Dashboard = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen  bg-gray-50 dark:bg-stone-900 transition-colors duration-300 px-4 rounded-2xl ">
+        <div className="min-h-screen bg-gray-50 dark:bg-stone-900 transition-colors duration-300 px-4">
             
-            <div className="container mx-auto p-6 md:p-10"></div>
+            {/* CONTENEDOR PRINCIPAL */}
+            <div className="container mx-auto p-6 md:p-10">
+                
+                {/* Cabecera del Dashboard */}
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
@@ -68,7 +89,6 @@ const Dashboard = () => {
                         </p>
                     </div>
                     
-                    {/* Botón Cerrar Sesión movido aquí */}
                     <button 
                         onClick={logout} 
                         className="btn btn-red shadow-lg shadow-red-500/20"
@@ -77,15 +97,11 @@ const Dashboard = () => {
                     </button>
                 </div>
 
-            {/* CONTENEDOR PRINCIPAL */}
-            <div className="container mx-auto p-6 md:p-10">
-
                 {/* === ZONA ADMIN === */}
                 {user.role === 'admin' && (
                     <div className="mb-12 space-y-8">
                         <div className="p-6 bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-900/50 rounded-2xl shadow-sm">
                             
-                            {/* Cabecera Admin */}
                             <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
                                 <div>
                                     <h2 className="text-2xl font-bold text-rose-700 dark:text-rose-400">
@@ -100,21 +116,15 @@ const Dashboard = () => {
                                 </Link>
                             </div>
 
-                            {/* TABLA CON BUSCADOR */}
                             <div className="card-stone overflow-hidden">
-                                
                                 <div className="p-4 bg-gray-50 dark:bg-stone-700 border-b border-gray-200 dark:border-stone-600 flex flex-col sm:flex-row justify-between items-center gap-4">
                                     <h3 className="font-bold text-gray-700 dark:text-gray-200">
                                         Catálogo ({filteredMovies.length} películas)
                                     </h3>
-                                    
-                                    {/* 2. USAMOS EL NUEVO COMPONENTE AQUÍ  */}
-                                    {/* Le pasamos el estado y la función para actualizarlo */}
                                     <MovieSearch 
                                         searchTerm={searchTerm} 
                                         setSearchTerm={setSearchTerm} 
                                     />
-
                                 </div>
                                 
                                 <div className="max-h-96 overflow-y-auto">
@@ -130,12 +140,24 @@ const Dashboard = () => {
                                                             {movie.year}
                                                         </td>
                                                         <td className="p-4 text-right">
-                                                            <button 
-                                                                onClick={() => deleteMovie(movie._id)}
-                                                                className="btn btn-red"
-                                                            >
-                                                                Eliminar 🗑️
-                                                            </button>
+                                                            
+                                                            {/* 👇 4. BOTONES DE ACCIÓN (EDITAR Y BORRAR) */}
+                                                            <div className="flex justify-end gap-2">
+                                                                <button 
+                                                                    onClick={() => handleEditClick(movie)} 
+                                                                    className="bg-teal-700 hover:bg-teal-900 text-white py-1 px-3 rounded text-xs font-bold transition flex items-center gap-1"
+                                                                >
+                                                                    Editar 
+                                                                </button>
+
+                                                                <button 
+                                                                    onClick={() => askToDelete(movie._id)} 
+                                                                    className="btn btn-red py-1 px-3 text-xs"
+                                                                >
+                                                                    Eliminar 
+                                                                </button>
+                                                            </div>
+
                                                         </td>
                                                     </tr>
                                                 ))
@@ -150,7 +172,6 @@ const Dashboard = () => {
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 )}
@@ -192,6 +213,41 @@ const Dashboard = () => {
                     </>
                 )}
             </div>
+
+            {/* 👇 5. MODALES (BORRAR Y EDITAR) */}
+            
+            {/* Modal de Borrar */}
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+                    <div className="bg-white dark:bg-stone-800 rounded-lg shadow-xl max-w-sm w-full p-6 border dark:border-stone-600">
+                        <h3 className="text-lg font-bold text-center text-gray-900 dark:text-white mb-2">
+                            Confirmar eliminación
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 text-center text-sm mb-6">
+                           ¿Seguro que quieres borrar esta película? No se podrá recuperar.
+                        </p>
+                        <div className="flex gap-4 justify-center">
+                            <button onClick={close} className="px-4 py-2 bg-gray-200 dark:bg-stone-700 text-gray-800 dark:text-white rounded hover:bg-gray-300 transition">
+                                Cancelar
+                            </button>
+                            <button onClick={confirm} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                                Borrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de Editar */}
+            {isEditOpen && (
+                <EditMovieModal 
+                    isOpen={isEditOpen}
+                    onClose={closeEditModal}
+                    movie={movieToEdit}
+                    onUpdate={updateMovie} 
+                />
+            )}
+            
         </div>
     );
 };

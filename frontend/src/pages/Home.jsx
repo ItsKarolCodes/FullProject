@@ -8,11 +8,9 @@ const Home = () => {
             <div className="relative h-[400px] md:h-[600px] flex flex-col justify-center items-center text-center px-4"
             >
                 <img
-                    src="/images/cineGemini.png"
+                    src="/images/cineHero.png"
                     alt="Hero VideoClub"
                     className="absolute top-0 left-0 w-full h-full object-cover object-center"
-                // 'absolute' para que se salga del flujo y se ponga detrás
-                // 'object-cover' para que no se deforme
                 />
                 <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-lg">
                     Tu cine, <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-600">en casa.</span>

@@ -4,9 +4,7 @@ import { useState, useEffect } from 'react';
 export const useMovie = (id) => {
     // movie: Guarda el objeto con los datos (título, director, sinopsis...)
     const [movie, setMovie] = useState(null);
-    // loading: Empieza en true para mostrar el "Cargando..." mientras buscamos los datos
     const [loading, setLoading] = useState(true);
-    // error: Si la peli no existe o el servidor falla, guardamos el mensaje aquí
     const [error, setError] = useState(null);
 
     // 1. CARGAR PELÍCULA
@@ -14,10 +12,8 @@ export const useMovie = (id) => {
         const fetchMovie = async () => {
             try {
                 setLoading(true);
-                // Reseteamos el error al intentar cargar de nuevo
                 setError(null); 
 
-                // Petición GET al backend usando la variable de entorno
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`);
                 
                 if (!response.ok) {
@@ -25,26 +21,23 @@ export const useMovie = (id) => {
                 }
                 
                 const data = await response.json();
-                // Guardamos la peli en el estado
                 setMovie(data);
             } catch (err) {
                 console.error(err);
-                // Guardamos el mensaje para mostrarlo al usuario
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-        // Solo intentamos buscar si hay un ID válido
+        
         if (id) fetchMovie();
-        //si cambia de peli en la URL, el hook recarga los datos nuevos
     }, [id]);
 
     // 2. BORRAR PELÍCULA
     const deleteMovie = async () => {
         const token = localStorage.getItem('token');
         
-       try {
+        try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`, {
                 method: 'DELETE',
                 headers: { 
@@ -54,9 +47,9 @@ export const useMovie = (id) => {
             });
 
             if (response.ok) {
-                return true; // Éxito
+                return true; 
             } else {
-                return false; // Fallo
+                return false; 
             }
         } catch (error) {
             console.error(error);
@@ -64,6 +57,39 @@ export const useMovie = (id) => {
         }
     };
 
-    // Devolvemos todo lo necesario para utilizarlo en los componentes
-    return { movie, loading, error, deleteMovie };
+    // 3. ACTUALIZAR (Corregido)
+    const updateMovie = async (id, movieData) => {
+        setLoading(true);
+        const token = localStorage.getItem('token'); 
+
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`, { 
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(movieData)
+            });
+            
+            if (res.ok) {
+                const updatedMovie = await res.json();
+                
+                
+                setMovie(updatedMovie);
+                
+                return true; 
+            } else {
+                console.error("Error al actualizar");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error de conexión:", error);
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { movie, loading, error, deleteMovie, updateMovie };
 };
