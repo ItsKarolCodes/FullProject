@@ -55,7 +55,7 @@ const Dashboard = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-stone-900 transition-colors duration-300">
+        <div className="min-h-screen  bg-gray-50 dark:bg-stone-900 transition-colors duration-300 px-4 rounded-2xl ">
             
             <div className="container mx-auto p-6 md:p-10"></div>
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
@@ -101,14 +101,14 @@ const Dashboard = () => {
                             </div>
 
                             {/* TABLA CON BUSCADOR */}
-                            <div className="card-stone !p-0 overflow-hidden">
+                            <div className="card-stone overflow-hidden">
                                 
                                 <div className="p-4 bg-gray-50 dark:bg-stone-700 border-b border-gray-200 dark:border-stone-600 flex flex-col sm:flex-row justify-between items-center gap-4">
                                     <h3 className="font-bold text-gray-700 dark:text-gray-200">
                                         Catálogo ({filteredMovies.length} películas)
                                     </h3>
                                     
-                                    {/* 2. USAMOS EL NUEVO COMPONENTE AQUÍ 👇 */}
+                                    {/* 2. USAMOS EL NUEVO COMPONENTE AQUÍ  */}
                                     {/* Le pasamos el estado y la función para actualizarlo */}
                                     <MovieSearch 
                                         searchTerm={searchTerm} 
