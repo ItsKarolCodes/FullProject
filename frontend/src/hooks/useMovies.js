@@ -6,7 +6,7 @@ export const useMovies = () => {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // 1. Obtener TODAS las películas
+    //  Obtener TODAS las películas
     // Usamos 'useCallback' para memorizar la función. 
     // Esto evita bucles infinitos si la ponemos en un useEffect en otro componente.
     const getMovies = useCallback(async () => {
@@ -25,13 +25,10 @@ export const useMovies = () => {
         }
     }, []);
 
-    // 2. BORRAR una película (Protegida)
+    //  BORRAR una película (Protegida)
     const deleteMovie = async (id) => {
         // Recuperamos el token porque solo un Admin puede borrar
         const token = localStorage.getItem('token');
-        
-        // Confirmación de seguridad, preguntamos al usuario antes de borrar
-        if (!window.confirm("¿Estás seguro? Esta acción no se puede deshacer.")) return;
 
         try {
             // Petición DELETE al backend
@@ -54,6 +51,41 @@ export const useMovies = () => {
         }
         return false;
     };
+
+    // ACTUALIZAR 
+    const updateMovie = async (id, movieData) => {
+        const token = localStorage.getItem('token');
+        setLoading(true); // Opcional: poner loading global
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(movieData)
+            });
+
+            if (response.ok) {
+                const updatedMovie = await response.json();
+                
+                // Actualizamos la lista local para que la tabla cambie al instante
+                setMovies(prevMovies => 
+                    prevMovies.map(movie => movie._id === id ? updatedMovie : movie)
+                );
+                return true;
+            } else {
+                console.error("Error al actualizar");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error de conexión:", error);
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
     // Devolvemos los datos y las funciones para usarlo
-    return { movies, getMovies, deleteMovie, loading };
+    return { movies, getMovies, deleteMovie, updateMovie, loading };
 };

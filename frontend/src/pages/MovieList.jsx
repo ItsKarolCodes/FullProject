@@ -18,35 +18,45 @@ const MovieList = () => {
     return (
         <div className="container mx-auto px-4 py-8">
 
-            {/* Encabezado */}
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-bold text-rose-600">Catálogo de Películas</h2>
-            </div>
+        {/* Encabezado */}
+        <div className="flex justify-between items-center mb-8">
+            {/* Agregué dark:text-rose-500 para que resalte también en modo oscuro */}
+            <h2 className="text-3xl font-bold text-rose-600 dark:text-rose-500">
+                Catálogo de Películas
+            </h2>
+        </div>
 
-            {/* Grid de Tarjetas */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Grid de Tarjetas */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+            {/* 2. PROTECCIÓN: Renderizado condicional */}
+            {Array.isArray(movies) ? (
+                movies.map((movie) => (
+                    <MovieCard key={movie._id} movie={movie} />
+                ))
+            ) : (
                 
-                {/* 2. PROTECCIÓN: Solo hacemos map si es un array de verdad */}
-                {Array.isArray(movies) ? (
-                    movies.map((movie) => (
-                        <MovieCard key={movie._id} movie={movie} />
-                    ))
-                ) : (
-                    /* Si no es un array, mostramos un aviso en pantalla en vez de romper la app */
-                    <div className="col-span-4 text-center text-orange-500">
-                        <p>Los datos llegaron, pero no es una lista.</p>
-                        <p className="text-sm">Revisa la consola (F12) para ver la estructura.</p>
-                    </div>
-                )}
-            </div>
-
-            {/* Estado Vacío (Solo si es array y está vacío) */}
-            {!loading && Array.isArray(movies) && movies.length === 0 && (
-                <div className="text-center py-20 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                    <p className="text-gray-500 text-lg">No hay películas todavía.</p>
+                <div className="col-span-full card-stone-600 text-center border-orange-300 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20">
+                    <p className="text-orange-600 dark:text-orange-400 font-bold mb-2">
+                        ¡Ups! Los datos no son una lista.
+                    </p>
+                    <p className="text-sm text-stone-600 dark:text-stone-400">
+                        Revisa la consola (F12) para ver la estructura.
+                    </p>
                 </div>
             )}
         </div>
+
+        {/* Estado Vacío (Empty State) */}
+        {!loading && Array.isArray(movies) && movies.length === 0 && (
+               
+            <div className="card-stone-600 border-dashed text-center py-20">
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                    No hay películas todavía.
+                </p>
+            </div>
+        )}
+    </div>
     );
 };
 

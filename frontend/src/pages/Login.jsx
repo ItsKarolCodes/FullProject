@@ -26,45 +26,44 @@ const Login = () => {
 
         if (success) {
             // Si el login fue correcto, el hook ya guardó el token.
-            // Nosotros solo nos encargamos de redirigir.
+            // Nos encargamos de redirigir.
             navigate('/dashboard');
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-transparent">
-            <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                    Login 
-                </h2>
+        <div className="flex justify-center items-center min-h-screen bg-transparent px-4">
+            <div className="w-full max-w-lg card-stone"> {/* Tu clase card-stone */}
+                
+                <h2 className="form-title">Login</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">Usuario</label>
+                        <label className="form-label">Usuario</label>
                         <input
                             type="text"
                             placeholder="Usuario"
                             ref={usernameRef}
                             required
-                            className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                            className="form-input"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">Contraseña</label>
+                        <label className="form-label">Contraseña</label>
                         <input
                             type="password"
                             placeholder="Contraseña"
                             ref={passwordRef}
                             required
-                            className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                            className="form-input"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        disabled={loading} // Deshabilitamos si está cargando
-                        className={`w-full text-white font-bold py-3 rounded-lg transition-colors mt-6 ${loading ? 'bg-rose-400 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700'}`}
+                        disabled={loading}
+                        className={`btn btn-primary ${loading ? 'bg-rose-400 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700'}`}
                     >
                         {loading ? 'Entrando...' : 'Iniciar sesión'}
                     </button>

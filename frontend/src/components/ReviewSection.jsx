@@ -6,7 +6,7 @@ import { useReviews } from '@/hooks/useReviews';
 const ReviewSection = ({ movieId }) => {
     // 'reviews': Array donde guardaremos la lista de comentarios
     const [reviews, setReviews] = useState([]);
-    // 'newComment': El texto que el usuario está escribiendo en el input ahora mismo
+    // 'newComment': El texto que el usuario está escribiendo en el input
     const [newComment, setNewComment] = useState('');
     // 'rating': La puntuación (estrellas) seleccionada, por defecto 5.
     const [rating, setRating] = useState(5);

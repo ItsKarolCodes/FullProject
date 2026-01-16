@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Modak&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Modak&display=swap');
 @import "tailwindcss";
 
 
@@ -8,8 +8,6 @@
 @theme {
     --font-poppins: "Poppins", sans-serif;
     --color-rose-600: oklch(58.6% 0.253 17.585);
-
-
 }
 
 @utility dark {
@@ -31,6 +29,7 @@
     .links {
         @apply text-rose-500 hover:text-gray-300 text-sm font-bold uppercase tracking-wider transition duration-300;
     }
+    /* Botones */
     .btn {
         @apply font-bold py-2 px-4 rounded-lg transition-colors text-sm uppercase tracking-wide shadow-sm inline-flex items-center justify-center cursor-pointer;
     }
@@ -40,7 +39,12 @@
         @apply bg-rose-600 hover:bg-rose-700 text-white ;
     }
 
-    /* Variante de color peligro (Rojo) */
+    /* Botón Secundario (Gris) */
+    .btn-secondary {
+        @apply bg-gray-500 hover:bg-gray-600 text-white;
+    }
+
+    /* Boton Rojo */
     .btn-red {
         @apply bg-red-500 hover:bg-red-600 text-white ;
     }
@@ -61,6 +65,28 @@
     .text-area {     
         @apply  p-3 rounded-xl border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-700 text-stone-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all shadow-sm;
     }
+
+    /* Títulos centrados */
+    .form-title {
+        @apply text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center;
+    }
+    /* Etiquetas de los inputs */
+    .form-label {
+        @apply block text-gray-700 dark:text-gray-300 font-medium mb-1;
+    }
+    /* Inputs, Selects y Textareas */
+    .form-input {
+        @apply w-full border border-gray-300 dark:border-stone-600 bg-white dark:bg-stone-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 transition-colors;
+    }
+    /*  Clases para el Modal */
+    .modal-overlay {
+        @apply fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm;
+    }
+
+    .modal-card {
+        @apply w-full max-w-2xl bg-white dark:bg-stone-800 rounded-xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto;
+    }
+
 
 
 }
